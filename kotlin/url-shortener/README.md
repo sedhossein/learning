@@ -1,16 +1,11 @@
-## Commons
-
-- docker-compose exec postgres /bin/bash
-- psql -h 0.0.0.0 -p 5432 -U postgres -d appdb
-
-## TODO
+## Steps
 
 - [x] Init project + Add Dependencies
 - [x] Add all CRUD
 - [x] Add DB
 - [x] Add cache
 - [x] Make async
+- [ ] Write unit test for all parts
 - [ ] connect to localstack
 - [ ] Validation
 - [ ] Metric + Trace
-- 
