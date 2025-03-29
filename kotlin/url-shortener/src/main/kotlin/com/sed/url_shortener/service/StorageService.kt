@@ -12,9 +12,9 @@ import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Service
 
 @Service
-class StorageService(
-    @Autowired @Qualifier("cacheDataSource") private val cache: URLDataSource,
-    @Autowired @Qualifier("dbDataSource") private val db: URLDataSource,
+class StorageService @Autowired constructor(
+    @Qualifier("cacheDataSource") private val cache: URLDataSource,
+    @Qualifier("dbDataSource") private val db: URLDataSource,
 ) {
     companion object {
         private val logger: Logger = LoggerFactory.getLogger(StorageService::class.java)

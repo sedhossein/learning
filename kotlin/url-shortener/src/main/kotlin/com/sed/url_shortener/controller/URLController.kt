@@ -11,6 +11,17 @@ import java.util.*
 
 @RestController
 class URLController(val storage: StorageService) {
+    @ExceptionHandler(Throwable::class)
+    fun handleMissedException(e: Throwable): ResponseEntity<Response> {
+        return ResponseEntity.ok(
+            Response(
+                500, mapOf(
+                    "message" to e.message,
+                )
+            )
+        )
+    }
+
     companion object {
         val logger: Logger = LoggerFactory.getLogger(URLController::class.java)
     }
@@ -58,6 +69,7 @@ class URLControllerV1(storage: StorageService) : URLController(storage) {
     }
 
     @PostMapping("url")
+    @ResponseStatus(HttpStatus.CREATED)
     fun store(@RequestBody req: StoreRequest): ResponseEntity<Response> {
         val shorten = req.shorten ?: UUID.randomUUID().toString()
         val id = storage.save(req.original, shorten)
