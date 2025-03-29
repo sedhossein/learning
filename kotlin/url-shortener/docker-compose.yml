@@ -1,0 +1,92 @@
+version: '3.8'
+
+services:
+  ## Spring Boot Application
+  #  app:
+  #    build:
+  #      context: .
+  #      dockerfile: Dockerfile
+  #    ports:
+  #      - "8080:8080"
+  #    environment:
+  #      - SPRING_PROFILES_ACTIVE=dev
+  #      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/appdb
+  #      - SPRING_DATASOURCE_USERNAME=postgres
+  #      - SPRING_DATASOURCE_PASSWORD=postgres
+  #      - SPRING_REDIS_HOST=redis
+  #      - SPRING_REDIS_PORT=6379
+  #      - AWS_ACCESS_KEY_ID=test
+  #      - AWS_SECRET_ACCESS_KEY=test
+  #      - AWS_REGION=us-east-1
+  #      - AWS_ENDPOINT=http://localstack:4566
+  #    depends_on:
+  #      - postgres
+  #      - redis
+  #      - localstack
+
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=appdb
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./src/main/resources/schema.sql:/docker-entrypoint-initdb.d/init.sql  # SQL seed file
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  #  # LocalStack for AWS services
+  #  localstack:
+  #    image: localstack/localstack:2.0
+  #    ports:
+  #      - "4566:4566"            # LocalStack Gateway
+  #      - "4510-4559:4510-4559"  # External services port range
+  #    environment:
+  #      - SERVICES=s3,sqs,sns,dynamodb
+  #      - AWS_DEFAULT_REGION=us-east-1
+  #      - EDGE_PORT=4566
+  #      - LOCALSTACK_HOST=localstack
+  #      - DOCKER_HOST=unix:///var/run/docker.sock
+  #    volumes:
+  #      - "${TEMPDIR:-/tmp/localstack}:/tmp/localstack"
+  #      - "/var/run/docker.sock:/var/run/docker.sock"
+
+#  # pgAdmin 4
+#  pgadmin:
+#    image: dpage/pgadmin4
+#    environment:
+#      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+#      PGADMIN_DEFAULT_PASSWORD: password
+#    ports:
+#      - "5050:80"
+#    depends_on:
+#      - postgres
+#    links:
+#      - postgres:postgres #This is very important
+#    volumes:
+#      - pgadmin_data:/var/lib/pgadmin
+
+volumes:
+  postgres_data:
+  redis_data:
+#  pgadmin_data: #add pgadmin volume
