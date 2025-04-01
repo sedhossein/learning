@@ -31,8 +31,12 @@ dependencies {
     runtimeOnly("org.postgresql:postgresql")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-    testImplementation("com.h2database:h2:2.2.224")
+    testImplementation("com.h2database:h2")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test")
+    testImplementation("org.junit.jupiter:junit-jupiter-api")
+    testImplementation("io.mockk:mockk:1.13.17")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 }
 
 kotlin {

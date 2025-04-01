@@ -1,26 +1,24 @@
 package com.sed.url_shortener.datasource.mock
 
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 
 
-class MockURLDataSourceTest {
-    private val mockURLDataSource = MockURLDataSource()
+class MockURLDataSourceTest(@Autowired private val mockURLDataSource: MockURLDataSource) {
 
     @Test
-    fun get() {
-    }
+    fun `should select and get the data in list`() {
+        // give
+        val shorten = "11"
 
-    @Test
-    fun save() {
-    }
+        // when
+        val url = mockURLDataSource.get(shorten)
 
-    @Test
-    fun update() {
-    }
-
-    @Test
-    fun delete() {
+        // then
+        assert(url.id == 1)
+        assert(url.original == "http://one.com")
     }
 
     @Test
@@ -28,5 +26,8 @@ class MockURLDataSourceTest {
         val urls = mockURLDataSource.all()
 
         assertFalse(urls.isNullOrEmpty())
+        assertEquals(3, urls.size)
     }
+
+    // and so on ...
 }

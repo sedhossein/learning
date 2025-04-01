@@ -42,9 +42,6 @@ class StorageService @Autowired constructor(
             val url = db.get(shorten)
             requestScope.launch {
                 withTimeoutOrNull(CACHE_UPDATE_TIMEOUT_MS) {
-                    logger.debug("====================1")
-                    delay(4000L)
-                    logger.debug("====================2")
                     try {
                         cache.save(url.original, shorten)
                         logger.debug("Cache updated for $shorten.")
