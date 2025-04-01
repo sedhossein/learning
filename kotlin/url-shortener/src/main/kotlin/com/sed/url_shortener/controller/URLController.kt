@@ -59,13 +59,14 @@ class URLControllerV1(storage: StorageService) : URLController(storage) {
             }
 
             logger.info("Successfully fetched url: {}", url)
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             logger.error("Fetch url failed: {}", e.toString())
         }
 
         return ResponseEntity
-            .status(HttpStatus.TEMPORARY_REDIRECT)
-            .location(URI.create(address)).build()
+            .status(307) // HttpStatus.TEMPORARY_REDIRECT
+            .location(URI.create(address))
+            .build()
     }
 
     @PostMapping("url")
