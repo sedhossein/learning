@@ -4,9 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.sed.url_shortener.datasource.mock.MockURLDataSource
 import com.sed.url_shortener.model.URL
 import com.sed.url_shortener.service.StorageService
+import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.TestInstance
@@ -16,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
 import org.springframework.http.MediaType
+import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
@@ -29,6 +32,7 @@ import kotlin.test.Test
 @AutoConfigureMockMvc(addFilters = false)
 @ActiveProfiles("test")
 @Import(URLControllerTest.MockStorageServiceConfig::class)
+@DirtiesContext
 internal class URLControllerTest @Autowired constructor(
     val mockMvc: MockMvc,
     val objMapper: ObjectMapper,
@@ -36,6 +40,11 @@ internal class URLControllerTest @Autowired constructor(
 ) {
 
     private val baseURL = "/api/v1"
+
+    @BeforeEach
+    fun setUp() {
+        clearAllMocks() // Reset mock state before each test
+    }
 
     @Nested
     @DisplayName("GET /api/v1/urls")

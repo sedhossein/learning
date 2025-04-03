@@ -1,12 +1,13 @@
 package com.sed.url_shortener.datasource.mock
 
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 
 
-class MockURLDataSourceTest(@Autowired private val mockURLDataSource: MockURLDataSource) {
+class MockURLDataSourceTest {
+
+    private var mockURLDataSource = MockURLDataSource() // Instantiate directly
 
     @Test
     fun `should select and get the data in list`() {

@@ -2,19 +2,19 @@ package com.sed.url_shortener.service
 
 import com.sed.url_shortener.datasource.URLDataSource
 import com.sed.url_shortener.model.URL
+import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.TestInstance
-import org.junit.jupiter.api.assertThrows
+import org.junit.jupiter.api.*
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.ActiveProfiles
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 @SpringBootTest
+@ActiveProfiles("test")
 internal class StorageServiceTest {
 
     private val cacheDataSource: URLDataSource = mockk()
@@ -23,10 +23,15 @@ internal class StorageServiceTest {
 
     private val storageService = StorageService(cacheDataSource, dbDataSource)
 
+    @BeforeEach
+    fun setUp() {
+        clearAllMocks() // Reset mock state before each test
+    }
+
     @Nested
     @DisplayName("get from datasource")
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-    inner class GetFromDatasource{
+    inner class GetFromDatasource {
         @Test
         fun `should get url from cache datasource`() = runTest {
             // given
@@ -50,7 +55,12 @@ internal class StorageServiceTest {
 
             coEvery { cacheDataSource.get(expectedUrl.shorten) } throws Exception("redis is down")
             coEvery { dbDataSource.get(expectedUrl.shorten) } returns expectedUrl
-            coEvery { cacheDataSource.save(expectedUrl.original, expectedUrl.shorten) } throws Exception("redis still is down")
+            coEvery {
+                cacheDataSource.save(
+                    expectedUrl.original,
+                    expectedUrl.shorten
+                )
+            } throws Exception("redis still is down")
 
             // when
             val url = storageService.get(expectedUrl.shorten)
