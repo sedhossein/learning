@@ -1,7 +1,6 @@
 package com.sed.url_shortener.datasource
 
 import com.sed.url_shortener.model.URL
-import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.support.GeneratedKeyHolder
 import org.springframework.stereotype.Repository
@@ -9,8 +8,7 @@ import java.sql.ResultSet
 import java.sql.Statement
 import java.sql.Timestamp
 
-@Repository
-@Qualifier("dbDataSource")
+@Repository("dbDataSource")
 class DBRepository(private val db: JdbcTemplate) : URLDataSource {
 
     override fun get(shortenURL: String): URL {

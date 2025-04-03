@@ -1,40 +1,18 @@
-package com.sed.url_shortener.controller
+package com.sed.url_shortener.controller.v1
 
+import com.sed.url_shortener.controller.Base
+import com.sed.url_shortener.controller.Response
 import com.sed.url_shortener.service.StorageService
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.net.URI
 import java.util.*
 
-@RestController
-class URLController(val storage: StorageService) {
-    @ExceptionHandler(Throwable::class)
-    fun handleMissedException(e: Throwable): ResponseEntity<Response> {
-        return ResponseEntity.ok(
-            Response(
-                500, mapOf(
-                    "message" to e.message,
-                )
-            )
-        )
-    }
-
-    companion object {
-        val logger: Logger = LoggerFactory.getLogger(URLController::class.java)
-    }
-
-    @GetMapping("/")
-    fun index(@RequestParam(name = "name", defaultValue = "guest", required = false) name: String?): String {
-        return "Hello, $name! Here is url shortener with Kotlin and localstack(aws:Redis+Postgresql)"
-    }
-}
 
 @RestController
 @RequestMapping("/api/v1")
-class URLControllerV1(storage: StorageService) : URLController(storage) {
+class URLControllerV1(private val storage: StorageService) : Base() {
     @GetMapping("/urls")
     fun all(): ResponseEntity<Response> {
         val urls = storage.all()
@@ -100,8 +78,6 @@ class URLControllerV1(storage: StorageService) : URLController(storage) {
     }
 
 }
-
-data class Response(val status: Int, val result: Map<String, Any?>)
 
 data class StoreRequest(val original: String, val shorten: String?)
 

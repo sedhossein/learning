@@ -2,14 +2,12 @@ package com.sed.url_shortener.datasource
 
 import com.sed.url_shortener.model.URL
 import jakarta.transaction.Transactional
-import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Repository
 import java.sql.Timestamp
 import java.util.concurrent.TimeUnit
 
-@Repository
-@Qualifier("cacheDataSource")
+@Repository("cacheDataSource")
 class CacheRepository(private val redisTemplate: RedisTemplate<String, URL>) : URLDataSource {
 
     private val ttl: Long = 1

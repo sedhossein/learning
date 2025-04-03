@@ -1,6 +1,7 @@
 package com.sed.url_shortener.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.sed.url_shortener.controller.v1.StoreRequest
 import com.sed.url_shortener.datasource.mock.MockURLDataSource
 import com.sed.url_shortener.model.URL
 import com.sed.url_shortener.service.StorageService
