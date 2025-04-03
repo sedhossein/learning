@@ -1,6 +1,5 @@
 package com.sed.url_shortener.controller.v1
 
-import com.sed.url_shortener.controller.Base
 import com.sed.url_shortener.controller.Response
 import com.sed.url_shortener.service.StorageService
 import org.springframework.http.HttpStatus
@@ -11,8 +10,8 @@ import java.util.*
 
 
 @RestController
-@RequestMapping("/api/v1")
-class URLControllerV1(private val storage: StorageService) : Base() {
+class URLControllerV1(private val storage: StorageService) : V1() {
+
     @GetMapping("/urls")
     fun all(): ResponseEntity<Response> {
         val urls = storage.all()
