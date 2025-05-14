@@ -39,7 +39,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
 
       - name: Run tests
-        run: ./gradlew test
+        run: ./kotlin/url-shortener/gradlew test
 
       - name: Upload test results
         if: always() # Upload even if previous steps fail
